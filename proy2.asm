@@ -80,22 +80,28 @@ puntajes      db "PUNTAJES ALTOS$"
 salir         db "SALIR$"
 iniciales     db "RRMS - 201902425$"
 ;; JUEGO
+;; JUEGO
 xJugador      db 0
 yJugador      db 0
+xObjetivo      db 0
+yObjetivo      db 0
 puntos        dw 0
+bandera      db 0
+bandera_caja      db 0
 ;; MENÚS
 opcion        db 0
 maximo        db 0
 opcion1        db 0
 maximo1        db 0
-opcion2        db 0
-maximo2        db 0
+opcion_Pausa        db 0
+maximo_Pausa        db 0
 xFlecha       dw 0
 yFlecha       dw 0
 xFlecha1       dw 0
 yFlecha1       dw 0
-xFlecha2       dw 0
-yFlecha2       dw 0
+xFlecha_Pausa       dw 0
+yFlecha_Pausa       dw 0
+mensaje_pausa db "JUEGO PAUSADO$"
 ;; CONTROLES
 control_arriba    db  48
 control_abajo     db  50
@@ -113,6 +119,10 @@ mensaje_izquierda db "Izquierda: $"
 mensaje_derecha  db "Derecha: $"
 ;; NIVELES
 nivel_x           db  "NIV.TXT",00
+cod_name    	  db    20 dup (0)
+nivel_1           db  "NIV.00",00
+nivel_2           db  "NIV.01",00
+nivel_3           db  "NIV.10",00
 handle_nivel      dw  0000
 linea             db  100 dup (0)
 elemento_actual   db  0
@@ -140,7 +150,8 @@ nuevo_izquierda db "DIRECCION IZQUIERDA$"
 nuevo_arriba db "DIRECCION ARRIBA$"
 nuevo_abajo db "DIRECCION ABAJO$"
 regresar  db "Regresar$"
-
+mensaje_continuar db "Reanudar juego$"
+mensaje_abandonar db "Abandonar juego$"
 label_flecha_arriba db "FLECHA ARRIBA$"
 label_flecha_abajo  db "FLECHA ABAJO$"
 label_flecha_izquierda db "FLECHA IZQUIERDA$"
@@ -594,6 +605,14 @@ pintar_flecha:
 pintar_flecha_configuracion:
 		mov AX, [xFlecha1]
 		mov BX, [yFlecha1]
+		mov SI, offset dim_sprite_flcha
+		mov DI, offset data_sprite_flcha
+		call pintar_sprite
+		ret
+
+pintar_flecha_pausa:
+		mov AX, [xFlecha_Pausa]
+		mov BX, [yFlecha_Pausa]
 		mov SI, offset dim_sprite_flcha
 		mov DI, offset data_sprite_flcha
 		call pintar_sprite
@@ -1295,6 +1314,122 @@ mapa_quemado:
 		call colocar_en_mapa
 		ret
 
+menu_pausa:
+		call pintar_menu_pausa
+		mov AL, [opcion]
+		cmp AL, 0
+		;; Continuar
+		cmp AL, 1
+		;; Abandonar
+		je inicio
+
+pintar_menu_pausa:
+		call clear_pantalla
+		mov AL, 0
+		mov [opcion_Pausa], AL
+		mov AL, 2
+		mov [maximo_Pausa], AL
+		mov AX, 50
+		mov BX, 40
+		mov [xFlecha_Pausa], AX
+		mov [yFlecha_Pausa], BX
+		; Posicionamos para imprimir mensaje de pausado
+		mov DL, 09
+		mov DH, 05
+		mov BH, 00
+		mov AH, 02
+		int 10
+		; Imprimimos mensaje
+		push DX
+		mov DX, offset mensaje_pausa
+		mov AH, 09
+		int 21
+		pop DX
+		; Posicionamos para imprimir mensaje de continuar
+		mov DL, 0c
+		mov DH, 08
+		mov BH, 00
+		mov AH, 02
+		int 10
+		; Imprimimos mensaje
+		push DX
+		mov DX, offset mensaje_continuar
+		mov AH, 09
+		int 21
+		pop DX
+		; Posicionamos para imprimir mensaje de abandonar
+		add DH, 02
+		mov BH, 00
+		mov AH, 02
+		int 10
+		; Imprimimos mensaje
+		push DX
+		mov DX, offset mensaje_abandonar
+		mov AH, 09
+		int 21
+		pop DX
+		; Imprimimos flecha
+		call pintar_flecha_pausa
+
+entrada_menu_pausa:
+		mov AH, 00
+		int 16
+		cmp AH, 48
+		je restar_opcion_menu_pausa
+		cmp AH, 50
+		je sumar_opcion_menu_pausa
+		cmp AH, 3b  ;; le doy F1
+		je fin_pausa
+		jmp entrada_menu_pausa
+
+restar_opcion_menu_pausa:
+		mov AL, [opcion_Pausa]
+		dec AL
+		cmp AL, 0ff
+		je volver_a_cero_pausa
+		mov [opcion_Pausa], AL
+		jmp mover_flecha_menu_pausa
+sumar_opcion_menu_pausa:
+		mov AL, [opcion_Pausa]
+		mov AH, [maximo_Pausa]
+		inc AL
+		cmp AL, AH
+		je volver_a_maximo_pausa
+		mov [opcion_Pausa], AL
+		jmp mover_flecha_menu_pausa
+volver_a_cero_pausa:
+		mov AL, 0
+		mov [opcion_Pausa], AL
+		jmp mover_flecha_menu_pausa
+volver_a_maximo_pausa:
+		mov AL, [maximo_Pausa]
+		dec AL
+		mov [opcion_Pausa], AL
+		jmp mover_flecha_menu_pausa
+mover_flecha_menu_pausa:
+		mov AX, [xFlecha_Pausa]
+		mov BX, [yFlecha_Pausa]
+		mov SI, offset dim_sprite_vacio
+		mov DI, offset data_sprite_vacio
+		call pintar_sprite
+		mov AX, 50
+		mov BX, 40
+		mov CL, [opcion_Pausa]
+ciclo_ubicar_flecha_menu_pausa:
+		cmp CL, 0
+		je pintar_flecha_menu_pausa
+		dec CL
+		add BX, 10
+		jmp ciclo_ubicar_flecha_menu_pausa
+pintar_flecha_menu_pausa:
+		mov [xFlecha_Pausa], AX
+		mov [yFlecha_Pausa], BX
+		call pintar_flecha_pausa
+		jmp entrada_menu_pausa
+		;;
+fin_pausa:
+		ret
+
 
 ;; entrada_juego - manejo de las entradas del juego
 entrada_juego:
@@ -1313,6 +1448,7 @@ entrada_juego:
 		cmp AH, [control_derecha]
 		je mover_jugador_der
 		cmp AH, 3c
+		je menu_pausa
 		ret
 mover_jugador_arr:
 		mov AH, [xJugador]
@@ -1322,8 +1458,14 @@ mover_jugador_arr:
 		call obtener_de_mapa
 		pop AX
 		;; DL <- elemento en mapa
+		cmp bandera,1
+		je colocar_equis_arr
 		cmp DL, PARED
-		je hay_pared_arriba
+		je hay_pared_general
+		cmp DL, CAJA
+		je mover_objeto_arr
+		cmp DL, OBJETIVO
+		je mover_equis_arr
 		mov [yJugador], AL
 		;;
 		mov DL, JUGADOR
@@ -1335,8 +1477,115 @@ mover_jugador_arr:
 		inc AL
 		call colocar_en_mapa
 		ret
-hay_pared_arriba:
+mover_equis_arr:
+		mov bandera, 1
+		mov DL, JUGADOR
+		mov [yJugador], AL
+		push AX
+		call colocar_en_mapa
+		pop AX
+		mov DL, SUELO
+		inc AL 
+		call colocar_en_mapa
 		ret
+colocar_equis_arr:
+		cmp DL, CAJA
+		je colocar_cajax_arr
+		cmp DL, PARED
+		je hay_pared_general
+		mov DL, JUGADOR
+		mov [yJugador], AL
+		push AX
+		call colocar_en_mapa
+		pop AX
+		mov DL, OBJETIVO
+		inc AL
+		call colocar_en_mapa
+		mov bandera_caja, 0
+		mov bandera, 0
+		ret
+colocar_cajax_arr:
+		dec AL
+    	push AX
+		call obtener_de_mapa
+		pop AX
+		;; DL <- elemento en mapa arriba de la caja
+		cmp DL, PARED
+		je hay_pared_general
+		cmp DL, CAJA
+		je hay_pared_general
+		mov DL, CAJA
+		push AX
+		call colocar_en_mapa
+		pop AX
+
+		mov DL, JUGADOR
+		inc AL
+		mov [yJugador], AL
+		push AX
+		call colocar_en_mapa
+		pop AX
+
+		mov DL, OBJETIVO
+		inc AL
+		call colocar_en_mapa
+		mov bandera,0
+		ret
+hay_pared_general:
+		ret
+mover_objeto_arr:
+		dec AL
+    	push AX
+		call obtener_de_mapa
+		pop AX
+		;; DL <- elemento en mapa arriba de la caja
+		cmp DL, PARED
+		je hay_pared_general
+		cmp DL, CAJA
+		je hay_pared_general
+		cmp DL, OBJETIVO
+		je activar_bandera_caja_arr
+		mov DL, CAJA
+		push AX
+		call colocar_en_mapa
+		pop AX
+
+		mov DL, JUGADOR
+		inc AL
+		mov [yJugador], AL
+		push AX
+		call colocar_en_mapa
+		pop AX
+
+		mov DL, SUELO
+		inc AL
+		call colocar_en_mapa
+		cmp bandera_caja, 1
+		je activar_bandera
+		ret
+activar_bandera:
+		mov bandera, 1
+		mov bandera_caja, 0
+		ret
+activar_bandera_caja_arr:
+		mov bandera_caja, 1
+		mov DL, CAJA
+		push AX
+		call colocar_en_mapa
+		pop AX
+
+		mov DL, JUGADOR
+		inc AL
+		mov [yJugador], AL
+		push AX
+		call colocar_en_mapa
+		pop AX
+
+		mov DL, SUELO
+		inc AL
+		call colocar_en_mapa
+		ret
+		
 mover_jugador_aba:
 		mov AH, [xJugador]
 		mov AL, [yJugador]
@@ -1345,8 +1594,14 @@ mover_jugador_aba:
 		call obtener_de_mapa
 		pop AX
 		;; DL <- elemento en mapa
+		cmp bandera,1
+		je colocar_equis_aba
 		cmp DL, PARED
-		je hay_pared_abajo
+		je hay_pared_general
+		cmp DL, CAJA
+		je mover_objeto_aba
+		cmp DL, OBJETIVO
+		je mover_equis_aba
 		mov [yJugador], AL
 		;;
 		mov DL, JUGADOR
@@ -1358,7 +1613,112 @@ mover_jugador_aba:
 		dec AL
 		call colocar_en_mapa
 		ret
-hay_pared_abajo:
+mover_equis_aba:
+		mov bandera, 1
+
+		mov DL, JUGADOR
+		mov [yJugador], AL
+		push AX
+		call colocar_en_mapa
+		pop AX
+
+		mov DL, SUELO
+		dec AL 
+		call colocar_en_mapa
+
+		ret
+colocar_equis_aba:
+		cmp DL, CAJA
+		je colocar_cajax_aba
+		cmp DL, PARED
+		je hay_pared_general
+		mov DL, JUGADOR
+		mov [yJugador], AL
+		push AX
+		call colocar_en_mapa
+		pop AX
+		mov DL, OBJETIVO
+		dec AL
+		call colocar_en_mapa
+		mov bandera_caja, 0
+		mov bandera, 0
+		ret
+colocar_cajax_aba:
+		inc AL
+		push AX
+		call obtener_de_mapa
+		pop AX
+		;; DL <- elemento en mapa
+		cmp DL, PARED
+		je hay_pared_general
+		cmp DL, CAJA
+		je hay_pared_general
+		;;
+		mov DL, CAJA
+		push AX
+		call colocar_en_mapa
+		pop AX
+		;;
+		mov DL, JUGADOR
+		dec AL
+		mov [yJugador], AL
+		push AX
+		call colocar_en_mapa
+		pop AX
+		;;
+		mov DL, OBJETIVO
+		dec AL
+		call colocar_en_mapa
+		mov bandera, 0
+		ret
+mover_objeto_aba:
+		inc AL
+		push AX
+		call obtener_de_mapa
+		pop AX
+		;; DL <- elemento en mapa
+		cmp DL, PARED
+		je hay_pared_general
+		cmp DL, CAJA
+		je hay_pared_general
+		cmp DL, OBJETIVO
+		je activar_bandera_caja_aba
+		;;
+		mov DL, CAJA
+		push AX
+		call colocar_en_mapa
+		pop AX
+		;;
+		mov DL, JUGADOR
+		dec AL
+		mov [yJugador], AL
+		push AX
+		call colocar_en_mapa
+		pop AX
+		;;
+		mov DL, SUELO
+		dec AL
+		call colocar_en_mapa
+		cmp bandera_caja, 1
+		je activar_bandera
+		ret
+activar_bandera_caja_aba:
+		mov bandera_caja, 1
+		mov DL, CAJA
+		push AX
+		call colocar_en_mapa
+		pop AX
+		;;
+		mov DL, JUGADOR
+		dec AL
+		mov [yJugador], AL
+		push AX
+		call colocar_en_mapa
+		pop AX
+		;;
+		mov DL, SUELO
+		dec AL
+		call colocar_en_mapa
 		ret
 mover_jugador_izq:
 		mov AH, [xJugador]
@@ -1368,8 +1728,14 @@ mover_jugador_izq:
 		call obtener_de_mapa
 		pop AX
 		;; DL <- elemento en mapa
+		cmp bandera,1
+		je colocar_equis_izq
 		cmp DL, PARED
-		je hay_pared_izquierda
+		je hay_pared_general
+		cmp DL, CAJA
+		je mover_objeto_izq
+		cmp DL, OBJETIVO
+		je mover_equis_izq
 		mov [xJugador], AH
 		;;
 		mov DL, JUGADOR
@@ -1381,7 +1747,112 @@ mover_jugador_izq:
 		inc AH
 		call colocar_en_mapa
 		ret
-hay_pared_izquierda:
+mover_equis_izq:
+		mov bandera, 1
+
+		mov DL, JUGADOR
+		mov [xJugador], AH
+		push AX
+		call colocar_en_mapa
+		pop AX
+
+		mov DL, SUELO
+		inc AH
+		call colocar_en_mapa
+
+		ret
+colocar_equis_izq:
+		cmp DL, CAJA
+		je colocar_cajax_izq
+		cmp DL, PARED
+		je hay_pared_general
+		mov DL, JUGADOR
+		mov [xJugador], AH
+		push AX
+		call colocar_en_mapa
+		pop AX
+		mov DL, OBJETIVO
+		inc AH
+		call colocar_en_mapa
+		mov bandera_caja, 0
+		mov bandera, 0
+		ret
+colocar_cajax_izq:
+		dec AH
+		push AX
+		call obtener_de_mapa
+		pop AX
+		;; DL <- elemento en el mapa a la izquierda de la caja
+		cmp DL, PARED
+		je hay_pared_general
+		cmp DL, CAJA
+		je hay_pared_general
+		;; Empujar la caja
+		mov DL, CAJA
+		push AX
+		call colocar_en_mapa
+		pop AX
+
+		mov DL, JUGADOR
+		inc AH
+		mov [xJugador], AH
+		push AX
+		call colocar_en_mapa
+		pop AX
+		
+		mov DL, OBJETIVO
+		inc AH
+		call colocar_en_mapa
+		mov bandera, 0
+		ret
+mover_objeto_izq:
+		dec AH
+		push AX
+		call obtener_de_mapa
+		pop AX
+		;; DL <- elemento en el mapa a la izquierda de la caja
+		cmp DL, PARED
+		je hay_pared_general
+		cmp DL, CAJA
+		je hay_pared_general
+		cmp DL, OBJETIVO
+		je activar_bandera_caja_izq
+		;; Empujar la caja
+		mov DL, CAJA
+		push AX
+		call colocar_en_mapa
+		pop AX
+
+		mov DL, JUGADOR
+		inc AH
+		mov [xJugador], AH
+		push AX
+		call colocar_en_mapa
+		pop AX
+		
+		mov DL, SUELO
+		inc AH
+		call colocar_en_mapa
+		cmp bandera_caja, 1
+		je activar_bandera
+		ret
+activar_bandera_caja_izq:
+		mov bandera_caja, 1
+		mov DL, CAJA
+		push AX
+		call colocar_en_mapa
+		pop AX
+
+		mov DL, JUGADOR
+		inc AH
+		mov [xJugador], AH
+		push AX
+		call colocar_en_mapa
+		pop AX
+		
+		mov DL, SUELO
+		inc AH
+		call colocar_en_mapa
 		ret
 mover_jugador_der:
 		mov AH, [xJugador]
@@ -1391,8 +1862,14 @@ mover_jugador_der:
 		call obtener_de_mapa
 		pop AX
 		;; DL <- elemento en mapa
+		cmp bandera,1
+		je colocar_equis_der
 		cmp DL, PARED
-		je hay_pared_derecha
+		je hay_pared_general
+		cmp DL, CAJA
+		je mover_objeto_der
+		cmp DL, OBJETIVO
+		je mover_equis_der
 		mov [xJugador], AH
 		;;
 		mov DL, JUGADOR
@@ -1404,7 +1881,112 @@ mover_jugador_der:
 		dec AH
 		call colocar_en_mapa
 		ret
-hay_pared_derecha:
+mover_equis_der:
+		mov bandera, 1
+
+		mov DL, JUGADOR
+		mov [xJugador], AH
+		push AX
+		call colocar_en_mapa
+		pop AX
+
+		mov DL, SUELO
+		dec AH
+		call colocar_en_mapa
+
+		ret
+colocar_equis_der:
+		cmp DL, CAJA
+		je colocar_cajax_der
+		cmp DL, PARED
+		je hay_pared_general
+		mov DL, JUGADOR
+		mov [xJugador], AH
+		push AX
+		call colocar_en_mapa
+		pop AX
+		mov DL, OBJETIVO
+		dec AH
+		call colocar_en_mapa
+		mov bandera_caja, 0
+		mov bandera, 0
+		ret
+colocar_cajax_der:
+		inc AH
+		push AX
+		call obtener_de_mapa
+		pop AX
+		;; DL <- elemento en el mapa a la izquierda de la caja
+		cmp DL, PARED
+		je hay_pared_general
+		cmp DL, CAJA
+		je hay_pared_general
+		;; Empujar la caja
+		mov DL, CAJA
+		push AX
+		call colocar_en_mapa
+		pop AX
+
+		mov DL, JUGADOR
+		dec AH
+		mov [xJugador], AH
+		push AX
+		call colocar_en_mapa
+		pop AX
+		
+		mov DL, OBJETIVO
+		dec AH
+		call colocar_en_mapa
+		mov bandera, 0
+		ret
+
+mover_objeto_der:
+		inc AH
+		push AX
+		call obtener_de_mapa
+		pop AX
+		;; DL <- elemento en el mapa a la derecha de la caja
+		cmp DL, PARED
+		je hay_pared_general
+		cmp DL, CAJA
+		je hay_pared_general
+		cmp DL, OBJETIVO
+		je activar_bandera_caja_der
+		mov DL, CAJA
+		push AX
+		call colocar_en_mapa
+		pop AX
+
+		mov DL, JUGADOR
+		dec AH
+		mov [xJugador], AH
+		push AX
+		call colocar_en_mapa
+		pop AX
+
+		mov DL, SUELO
+		dec AH
+		call colocar_en_mapa
+		cmp bandera_caja, 1
+		je activar_bandera
+		ret
+activar_bandera_caja_der:
+		mov bandera_caja, 1
+		mov DL, CAJA
+		push AX
+		call colocar_en_mapa
+		pop AX
+
+		mov DL, JUGADOR
+		dec AH
+		mov [xJugador], AH
+		push AX
+		call colocar_en_mapa
+		pop AX
+
+		mov DL, SUELO
+		dec AH
+		call colocar_en_mapa
 		ret
 fin_entrada_juego:
 		ret
