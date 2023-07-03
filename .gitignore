@@ -7,6 +7,10 @@
 *.exe
 *.obj
 *.txt
+*.00
+*.01
+*.10
+*.vscode
 # User-specific files
 *.rsuser
 *.suo

@@ -78,9 +78,15 @@ cargar_nivel  db "CARGAR NIVEL$"
 configuracion db "CONFIGURACION$"
 puntajes      db "PUNTAJES ALTOS$"
 salir         db "SALIR$"
-iniciales     db "RRMS - 201902425$"
+iniciales     db "AFSS - 202012039$"
+contador_cronometro db  "00:00:00$"
+puntaje_label 	  db "00000$"
 ;; JUEGO
-;; JUEGO
+mensaje_cargar db "<< CARGAR NIVEL >>$"
+mensaje_indicar db "Escriba el nombre del nivel$"
+nueva_lin  db    0a,"$"
+prompt_nombre    db    "NOMBRE: ","$"
+buffer_entrada   db  20, 00
 xJugador      db 0
 yJugador      db 0
 xObjetivo      db 0
@@ -118,7 +124,6 @@ mensaje_abajo    db "Abajo: $"
 mensaje_izquierda db "Izquierda: $"
 mensaje_derecha  db "Derecha: $"
 ;; NIVELES
-nivel_x           db  "NIV.TXT",00
 cod_name    	  db    20 dup (0)
 nivel_1           db  "NIV.00",00
 nivel_2           db  "NIV.01",00
@@ -156,13 +161,44 @@ label_flecha_arriba db "FLECHA ARRIBA$"
 label_flecha_abajo  db "FLECHA ABAJO$"
 label_flecha_izquierda db "FLECHA IZQUIERDA$"
 label_flecha_derecha  db "FLECHA DERECHA$"
+mensaje_bienvenida db "BIENVENIDO A SOKOBAN$"
+mensaje_datos_desarrollador db "Angel Sique - 202012039$"
 .CODE
 .STARTUP
-inicio:
+mensaje_inicial:
 		;; MODO VIDEO ;;
 		mov AH, 00
 		mov AL, 13
 		int 10
+		;;;;;;;;;;;;;;;;
+		mov DL, 0c
+		mov DH, 09
+		mov BH, 00
+		mov AH, 02
+		int 10
+		;; <<-- posicionar el cursor
+		push DX
+		mov DX, offset mensaje_bienvenida
+		mov AH, 09
+		int 21
+		pop DX
+		;;
+		;;;; DATOS
+		add DH, 02
+		mov BH, 00
+		mov AH, 02
+		int 10
+		push DX
+		mov DX, offset mensaje_datos_desarrollador
+		mov AH, 09
+		int 21
+		pop DX
+		;; Delay de 5 segundos
+		call delay
+		;;;;;;;;;;;;;;;;
+		je inicio
+
+inicio:
 		;;;;;;;;;;;;;;;;
 		call menu_principal
 		mov AL, [opcion]
@@ -171,7 +207,7 @@ inicio:
 		je ciclo_juego
 		;; > CARGAR NIVEL
 		cmp AL, 1
-		je cargar_un_nivel
+		je pedir_nivel_juego
 		;; > CONFIGURACION
 		cmp AL, 3
 		je menu_configuracion
@@ -184,16 +220,11 @@ inicio:
 ciclo_juego:
 		call pintar_mapa
 		call entrada_juego
+		call pintar_nombre_prueba
 		jmp ciclo_juego
 		;;;;;;;;;;;;;;;;
 
-cargar_un_nivel:
-		mov AL, 00
-		mov DX, offset nivel_x
-		mov AH, 3d
-		int 21
-		jc inicio
-		mov [handle_nivel], AX
+
 		;;
 ciclo_lineas:
 		mov BX, [handle_nivel]
@@ -420,7 +451,7 @@ fin_pintar_sprite:
 delay:
 		push SI
 		push DI
-		mov SI, 0200
+		mov SI, 1300
 cicloA:
 		mov DI, 0130
 		dec SI
@@ -660,7 +691,7 @@ cambiar_direccion_abajo:
         mov control_abajo, AH
 
 cambiar_direccion_arriba:
-call clear_pantalla
+		call clear_pantalla
         mov AL, 0
         ;; Mensaje de cambio
         mov DL, 08
@@ -740,7 +771,7 @@ cambiar_direccion_derecha:
     
         mov control_derecha, AH
 cambiar_direccion_izquierda:
-call clear_pantalla
+		call clear_pantalla
         mov AL, 0
         ;; Mensaje de cambio
         mov DL, 08
@@ -1102,10 +1133,10 @@ obtener_de_mapa:
 ;; ENTRADA:
 ;; SALIDA:
 pintar_mapa:
-		mov AL, 00   ;; fila
+		mov AL, 1   ;; fila
 		;;
 ciclo_v:
-		cmp AL, 19
+		cmp AL, 18
 		je fin_pintar_mapa
 		mov AH, 00   ;; columna
 		;;
@@ -1116,22 +1147,22 @@ ciclo_h:
 		call obtener_de_mapa
 		pop AX
 		;;
-                cmp DL, NADA
+        cmp DL, NADA
 		je pintar_vacio_mapa
 		;;
-                cmp DL, JUGADOR
+        cmp DL, JUGADOR
 		je pintar_jugador_mapa
 		;;
-                cmp DL, PARED
+        cmp DL, PARED
 		je pintar_pared_mapa
 		;;
-                cmp DL, CAJA
+        cmp DL, CAJA
 		je pintar_caja_mapa
 		;;
-                cmp DL, OBJETIVO
+        cmp DL, OBJETIVO
 		je pintar_objetivo_mapa
 		;;
-                cmp DL, SUELO
+        cmp DL, SUELO
 		je pintar_suelo_mapa
 		;;
 		jmp continuar_h
@@ -1429,7 +1460,47 @@ pintar_flecha_menu_pausa:
 		;;
 fin_pausa:
 		ret
+; Imprime datos del desarrollador
+pintar_nombre_prueba:
+		mov DL, 00
+		mov DH, 18
+		mov BH, 00
+		mov AH, 02
+		int 10
+		;;
+		push DX
+		mov DX, offset iniciales
+		mov AH, 09
+		int 21
+		pop DX
 
+;; Contador de referencia
+pintar_contador:
+		mov DL, 19
+		mov DH, 18
+		mov BH, 00
+		mov AH, 02
+		int 10
+		;;
+		push DX
+		mov DX, offset contador_cronometro
+		mov AH, 09
+		int 21
+		pop DX
+
+;; Punteo de referencia
+pintar_punteo:
+		mov DL, 19
+		mov DH, 00
+		mov BH, 00
+		mov AH, 02
+		int 10
+		;;
+		push DX
+		mov DX, offset puntaje_label
+		mov AH, 09
+		int 21
+		pop DX
 
 ;; entrada_juego - manejo de las entradas del juego
 entrada_juego:
@@ -2122,6 +2193,104 @@ ciclo_copiar_num:
 		pop DI
 		ret
 
+pedir_nivel_juego:
+
+        call clear_pantalla
+        mov AL, 0
+        mov DL, 08
+		mov DH, 05
+		mov BH, 00
+		mov AH, 02
+		int 10
+		;;
+		mov DX, offset mensaje_cargar
+		mov AH, 09
+		int 21
+		mov DX, offset nueva_lin
+		mov AH, 09
+		int 21
+        mov DX, offset nueva_lin
+		mov AH, 09
+		int 21
+
+        mov DL, 08
+		mov DH, 08
+		mov BH, 00
+		mov AH, 02
+		int 10
+
+        mov DX, offset mensaje_indicar
+		mov AH, 09
+		int 21
+		;;; PEDIR NOMBRE
+pedir_de_nuevo_nombre:
+        mov DL, 08
+        mov DH, 08
+        add DH, 03
+        mov BH, 00
+        mov AH, 02
+        int 10
+        ;;
+		mov DX, offset prompt_nombre
+		mov AH, 09
+		int 21
+		mov DX, offset buffer_entrada
+		mov AH, 0a
+		int 21
+		;;; verificar que el tamaño del codigo no sea mayor a 5
+		mov DI, offset buffer_entrada
+		inc DI
+		mov AL, [DI]
+		cmp AL, 00
+		je  pedir_de_nuevo_nombre
+		cmp AL, 20
+		jb  aceptar_tam_nom
+		mov DX, offset nueva_lin
+		mov AH, 09
+		int 21
+		jmp pedir_de_nuevo_nombre
+aceptar_tam_nom:
+		mov SI, offset cod_name
+		mov DI, offset buffer_entrada
+		inc DI
+		mov CH, 00
+		mov CL, [DI]
+		inc DI  ;; me posiciono en el contenido del buffer
+
+copiar_nombre:	mov AL, [DI]
+		mov [SI], AL
+		inc SI
+		inc DI
+		loop copiar_nombre  ;; restarle 1 a CX, verificar que CX no sea 0, si no es 0 va a la etiqueta, 
+		;;; la cadena ingresada en la estructura
+		;;;
+		mov DX, offset nueva_lin
+		mov AH, 09
+		int 21
+		;;
+buscar_archivo:
+
+        mov CX, 26
+		mov DX, offset cod_name
+		mov AH, 40
+		int 21
+        ;;cmp pedir_nivel_juego
+
+
+cargar_un_nivel_x:
+		mov AL, 00
+		mov DX, offset cod_name
+		mov AH, 3d
+		int 21
+		jc inicio
+		mov [handle_nivel], AX
+		;call memset
+        jmp ciclo_lineas
+    
+salirr:
+    ;jmp pedir_nivel_juego
+    ret
+
 ;; cadenaAnum
 ;; ENTRADA:
 ;;    DI -> dirección a una cadena numérica
@@ -2192,6 +2361,7 @@ mapear_izquierda:
 		mov AH, 09
 		int 21
     	jmp seleccionar_opcion_configuracion
+
 
 fin:
 .EXIT
