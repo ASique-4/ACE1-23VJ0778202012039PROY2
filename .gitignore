@@ -3,6 +3,10 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/main/VisualStudio.gitignore
 
+# ASM GARBAGE
+*.exe
+*.obj
+*.txt
 # User-specific files
 *.rsuser
 *.suo

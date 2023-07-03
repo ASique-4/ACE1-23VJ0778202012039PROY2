@@ -18,14 +18,14 @@ data_sprite_jug   db   95, 95, 0f, 95, 95, 95, 0f, 95
                   db   95, 95, 37, 37, 37, 37, 37, 95
                   db   95, 95, 5b, 95, 95, 95, 5b, 95
 dim_sprite_flcha  db   08, 08
-data_sprite_flcha db   00, 00, 00, 3c, 00, 00, 00, 00
-                  db   00, 00, 00, 3c, 3c, 00, 00, 00
-                  db   00, 00, 00, 00, 3c, 3c, 00, 00
-                  db   00, 00, 00, 00, 00, 3c, 3c, 00
-                  db   00, 00, 00, 00, 00, 3c, 3c, 00
-                  db   00, 00, 00, 00, 3c, 3c, 00, 00
-                  db   00, 00, 00, 3c, 3c, 00, 00, 00
-                  db   00, 00, 00, 3c, 00, 00, 00, 00
+data_sprite_flcha db   00, 00, 00, 34, 00, 00, 00, 00
+				  db   00, 24, 24, 2c, 24, 24, 00, 00
+                  db   2c, 2c, 2c, 2c, 2c, 2c, 2c, 00
+                  db   24, 24, 24, 24, 24, 24, 24, 00
+                  db   24, 3c, 3c, 3c, 3c, 3c, 24, 00
+                  db   24, 3c, 10, 3c, 10, 3c, 24, 00
+                  db   24, 3c, 3c, 3c, 3c, 3c, 24, 00
+                  db   24, 24, 3c, 3c, 3c, 24, 24, 00
 
 dim_sprite_vacio  db   08, 08
 data_sprite_vacio db   00, 00, 00, 00, 00, 00, 00, 00
@@ -46,32 +46,32 @@ data_sprite_suelo db   95, 95, 95, 95, 95, 95, 95, 95
                   db   95, 95, 95, 95, 95, 95, 95, 95
                   db   95, 95, 95, 95, 95, 95, 95, 95
 dim_sprite_pared  db   08, 08
-data_sprite_pared db   35, 35, 0f, 0f, 35, 35, 0f, 0f
-                  db   35, 0f, 0f, 35, 35, 0f, 0f, 35
-                  db   0f, 0f, 35, 35, 0f, 0f, 35, 35
-                  db   0f, 35, 35, 0f, 0f, 35, 35, 0f
-                  db   35, 35, 0f, 0f, 35, 35, 0f, 0f
-                  db   35, 0f, 0f, 35, 35, 0f, 0f, 35
-                  db   0f, 0f, 35, 35, 0f, 0f, 35, 35
-                  db   0f, 35, 35, 0f, 0f, 35, 35, 0f
+data_sprite_pared db   7e, 7e, 7e, 7e, 7e, 7e, 7e, 7e
+                  db   7e, 34, 34, 34, 34, 34, 34, 7e
+                  db   7e, 34, 34, 34, 34, 34, 34, 7e
+                  db   7e, 34, 34, 34, 34, 34, 34, 7e
+                  db   7e, 34, 34, 34, 34, 34, 34, 7e
+                  db   7e, 34, 34, 34, 34, 34, 34, 7e
+                  db   7e, 34, 34, 34, 34, 34, 34, 7e
+                  db   7e, 7e, 7e, 7e, 7e, 7e, 7e, 7e
 dim_sprite_caja   db   08, 08
-data_sprite_caja  db  95,95,95,95,95,95,95,95
-                  db  95,95,0b8,0b8,0b8,0b8,95,95
-                  db  95,0b8,8a,8a,8a,8a,0b8,95
-                  db  95,0b8,8a,8a,8a,8a,0b8,95
-                  db  95,0b8,8a,8a,8a,8a,0b8,95
-                  db  95,0b8,8a,8a,8a,8a,0b8,95
-                  db  95,95,0b8,0b8,0b8,0b8,95,95
-                  db  95,95,95,95,95,95,95,95
+data_sprite_caja  db   95, 95, 95, 11, 11, 95, 95, 95
+                  db   95, 95, 11, 1f, 34, 11, 95, 95
+                  db   95, 11, 1f, 11, 11, 1f, 11, 95
+                  db   95, 11, 34, 11, 11, 34, 11, 95
+                  db   95, 95, 11, 1f, 1f, 11, 95, 95
+                  db   95, 95, 11, 34, 11, 95, 95, 95
+                  db   95, 95, 11, 34, 34, 11, 95, 95
+                  db   95, 95, 11, 11, 11, 11, 95, 95
 dim_sprite_obj    db   08, 08
-data_sprite_obj   db  95,95,95,95,95,95,95,95
-                  db  95,28,95,95,95,95,28,95
-                  db  95,95,28,95,95,28,95,95
-                  db  95,95,95,28,28,95,95,95
-                  db  95,95,95,28,28,95,95,95
-                  db  95,95,28,95,95,28,95,95
-                  db  95,28,95,95,95,95,28,95
-                  db  95,95,95,95,95,95,95,95
+data_sprite_obj   db   95, 95, 95, 11, 11, 95, 95, 95
+                  db   95, 95, 11, 18, 17, 11, 95, 95
+                  db   95, 11, 18, 11, 11, 18, 11, 95
+                  db   95, 11, 17, 11, 11, 17, 11, 95
+                  db   95, 95, 11, 18, 18, 11, 95, 95
+                  db   95, 95, 11, 17, 11, 95, 95, 95
+                  db   95, 95, 11, 17, 17, 11, 95, 95
+                  db   95, 95, 11, 11, 11, 11, 95, 95
 mapa              db   3e8 dup (0)
 iniciar_juego db "INICIAR JUEGO$"
 cargar_nivel  db "CARGAR NIVEL$"
@@ -86,13 +86,31 @@ puntos        dw 0
 ;; MENÚS
 opcion        db 0
 maximo        db 0
+opcion1        db 0
+maximo1        db 0
+opcion2        db 0
+maximo2        db 0
 xFlecha       dw 0
 yFlecha       dw 0
+xFlecha1       dw 0
+yFlecha1       dw 0
+xFlecha2       dw 0
+yFlecha2       dw 0
 ;; CONTROLES
 control_arriba    db  48
 control_abajo     db  50
 control_izquierda db  4b
 control_derecha   db  4d
+derecha_control db 0
+izquierda_control db 0
+arriba_control db 0
+abajo_control db 0
+mensaje_cambiar db "Cambiar Controles$"
+mensaje_actuales db "Controles Actuales$"
+mensaje_arriba   db "Arriba: $"
+mensaje_abajo    db "Abajo: $"
+mensaje_izquierda db "Izquierda: $"
+mensaje_derecha  db "Derecha: $"
 ;; NIVELES
 nivel_x           db  "NIV.TXT",00
 handle_nivel      dw  0000
@@ -109,6 +127,24 @@ tk_objetivo   db  08,"objetivo"
 tk_coma       db  01,","
 ;;
 numero        db  5 dup (30)
+label_actuales db "Controles Actuales$"
+label_arriba   db "Arriba: $"
+label_abajo    db "Abajo: $"
+label_izquierda db "Izquierda: $"
+label_derecha  db "Derecha: $"
+
+mensaje_cambiar_controles db "Cambiar Controles$"
+nueva_tecla   db "PRESIONE UNA TECLA PARA: $"
+nuevo_derecha db "DIRECCION DERECHA$"
+nuevo_izquierda db "DIRECCION IZQUIERDA$"
+nuevo_arriba db "DIRECCION ARRIBA$"
+nuevo_abajo db "DIRECCION ABAJO$"
+regresar  db "Regresar$"
+
+label_flecha_arriba db "FLECHA ARRIBA$"
+label_flecha_abajo  db "FLECHA ABAJO$"
+label_flecha_izquierda db "FLECHA IZQUIERDA$"
+label_flecha_derecha  db "FLECHA DERECHA$"
 .CODE
 .STARTUP
 inicio:
@@ -126,11 +162,14 @@ inicio:
 		cmp AL, 1
 		je cargar_un_nivel
 		;; > CONFIGURACION
+		cmp AL, 3
+		je menu_configuracion
 		;; > PUNTAJES ALTOS
 		;; > SALIR
 		cmp AL, 4
 		je fin
 		;;;;;;;;;;;;;;;;
+
 ciclo_juego:
 		call pintar_mapa
 		call entrada_juego
@@ -552,6 +591,438 @@ pintar_flecha:
 		call pintar_sprite
 		ret
 
+pintar_flecha_configuracion:
+		mov AX, [xFlecha1]
+		mov BX, [yFlecha1]
+		mov SI, offset dim_sprite_flcha
+		mov DI, offset data_sprite_flcha
+		call pintar_sprite
+		ret
+;; Menu Configuracion
+;; ...
+;; SALIDA
+;;    - [opcion] -> código numérico de la opción elegida
+ciclo_cambios_teclas:
+cambiar_direccion_abajo:
+		call clear_pantalla
+        mov AL, 0
+        ;; Mensaje de pausa
+        mov DL, 08
+		mov DH, 05
+		mov BH, 00
+		mov AH, 02
+		int 10
+		;;
+		mov DX, offset nueva_tecla
+		mov AH, 09
+		int 21
+
+        mov DL, 08
+		mov DH, 08
+		mov BH, 00
+		mov AH, 02
+		int 10
+
+        mov DX, offset nuevo_abajo
+		mov AH, 09
+		int 21
+
+        mov DL, 0c
+		mov DH, 08
+        ;add DH, 06 
+		mov BH, 00
+		mov AH, 02
+		int 10
+
+        mov AH, 00 
+        int 16           
+
+        mov abajo_control, AL
+        mov control_abajo, AH
+
+cambiar_direccion_arriba:
+call clear_pantalla
+        mov AL, 0
+        ;; Mensaje de cambio
+        mov DL, 08
+		mov DH, 05
+		mov BH, 00
+		mov AH, 02
+		int 10
+		;;
+		mov DX, offset nueva_tecla
+		mov AH, 09
+		int 21
+
+        mov DL, 08
+		mov DH, 08
+		mov BH, 00
+		mov AH, 02
+		int 10
+
+        mov DX, offset nuevo_arriba
+		mov AH, 09
+		int 21
+
+        mov DL, 0c
+		mov DH, 08
+        ;add DH, 06 
+		mov BH, 00
+		mov AH, 02
+		int 10
+
+        mov DL, 08
+		mov DH, 08
+        add DH, 06
+		mov BH, 00
+		mov AH, 02
+		int 10
+
+        mov AH, 00 
+        int 16    
+        
+        mov arriba_control, AL
+        mov control_arriba, AH
+
+cambiar_direccion_derecha:
+        call clear_pantalla
+        mov AL, 0
+        ;; Mensaje de pausa
+        mov DL, 08
+		mov DH, 05
+		mov BH, 00
+		mov AH, 02
+		int 10
+		;;
+		mov DX, offset nueva_tecla
+		mov AH, 09
+		int 21
+
+        mov DL, 08
+		mov DH, 08
+		mov BH, 00
+		mov AH, 02
+		int 10
+
+        mov DX, offset nuevo_derecha
+		mov AH, 09
+		int 21
+
+        mov DL, 0c
+		mov DH, 08
+        ;add DH, 06 
+		mov BH, 00
+		mov AH, 02
+		int 10
+
+        mov AH, 10
+        int 16
+        mov derecha_control, AL     
+    
+        mov control_derecha, AH
+cambiar_direccion_izquierda:
+call clear_pantalla
+        mov AL, 0
+        ;; Mensaje de cambio
+        mov DL, 08
+		mov DH, 05
+		mov BH, 00
+		mov AH, 02
+		int 10
+		;;
+		mov DX, offset nueva_tecla
+		mov AH, 09
+		int 21
+
+        mov DL, 08
+		mov DH, 08
+		mov BH, 00
+		mov AH, 02
+		int 10
+
+        mov DX, offset nuevo_izquierda
+		mov AH, 09
+		int 21
+
+        mov DL, 0c
+		mov DH, 08
+		mov BH, 00
+		mov AH, 02
+		int 10
+
+        mov AH, 00 
+        int 16           
+
+        mov izquierda_control, AL
+        mov control_izquierda, AH
+
+
+fin_ciclos_cambios:
+    jmp menu_configuracion
+
+; Menu configuracion
+menu_configuracion:
+        call menu_configuracion_1
+		mov AL, [opcion1]
+		;; CAMBIAR TECLAS
+		cmp AL, 0
+		je ciclo_cambios_teclas
+		;; REGRESAR
+		cmp AL, 1
+		je inicio
+
+menu_configuracion_1:
+        call clear_pantalla
+		mov AL, 0
+		mov [opcion1], AL      ;; reinicio de la variable de salida
+		mov AL, 2
+		mov [maximo1], AL
+		mov AX, 50
+		mov BX, 80
+		mov [xFlecha1], AX
+		mov [yFlecha1], BX
+		
+        ;; Mensaje de controles actuales
+        mov DL, 5c
+		mov DH, 03
+		mov BH, 00
+		mov AH, 02
+		int 10
+		;;
+		push DX
+		mov DX, offset mensaje_actuales
+		mov AH, 09
+		int 21
+		pop DX
+
+        ;; Mensaje de control abajo
+        mov DL, 09
+		mov DH, 06
+		mov BH, 00
+		mov AH, 02
+		int 10
+		;;
+		push DX
+		mov DX, offset label_abajo
+		mov AH, 09
+		int 21
+		pop DX
+
+        ;; Flecha abajo
+        mov DL, 10
+        add DL, 04 
+		mov DH, 06
+		mov BH, 00
+		mov AH, 02
+		int 10
+
+        cmp control_abajo, 50
+        je mapear_abajo
+        
+        mov DX, offset abajo_control
+        mov AH, 40h
+        mov BX, 01
+        mov CX, 0001
+		int 21
+        ;;
+
+actual_control_arriba:
+        ;;;
+        ;; Mensaje de control arriba 
+        mov DL, 09
+		mov DH, 08
+		mov BH, 00
+		mov AH, 02
+		int 10
+		;;
+		push DX
+		mov DX, offset label_arriba
+		mov AH, 09
+		int 21
+		pop DX
+        
+
+        ;; Flecha arriba
+
+        mov DL, 10
+        add DL, 04   
+		mov DH, 08
+		mov BH, 00
+		mov AH, 02
+		int 10
+
+        cmp control_arriba, 48
+        je mapear_arriba
+		;;
+		mov DX, offset arriba_control
+        mov AH, 40h
+        mov BX, 01
+        mov CX, 0001
+		int 21
+
+actual_control_derecha:
+        ;; Mensaje de control derecha 
+        mov DL, 09
+		mov DH, 08
+        add DH, 02  
+		mov BH, 00
+		mov AH, 02
+		int 10
+		;;
+		push DX
+		mov DX, offset mensaje_derecha
+		mov AH, 09
+		int 21
+		pop DX
+
+        ;; Flecha derecha
+
+        mov DL, 10
+        add DL, 04 
+		mov DH, 08
+        add DH, 02  
+		mov BH, 00
+		mov AH, 02
+		int 10
+		;;
+
+        cmp control_derecha, 4d
+        je mapear_derecha
+		;;
+		mov DX, offset derecha_control
+        mov AH, 40h
+        mov BX, 01
+        mov CX, 0001
+		int 21
+
+
+actual_control_izquierda:
+        ;; Mensaje de control izquierda 
+        mov DL, 09
+		mov DH, 08
+        add DH, 04  
+		mov BH, 00
+		mov AH, 02
+		int 10
+
+		push DX
+		mov DX, offset mensaje_izquierda
+		mov AH, 09
+		int 21
+		pop DX
+
+        ;; Flecha izquierda
+        mov DL, 10
+        add DL, 04  
+		mov DH, 08
+        add DH, 04 
+		mov BH, 00
+		mov AH, 02
+		int 10
+
+
+        cmp control_izquierda, 4b
+        je mapear_izquierda
+		;;
+		mov DX, offset izquierda_control
+        mov AH, 40h
+        mov BX, 01
+        mov CX, 0001
+		int 21
+
+seleccionar_opcion_configuracion:
+
+        mov DL, 0c
+		mov DH, 08
+        ;add DH, 06 
+		mov BH, 00
+		mov AH, 02
+		int 10
+		; ;; <<-- posicionar el cursor
+        add DH, 08
+		mov BH, 00
+		mov AH, 02
+		int 10
+		push DX
+		mov DX, offset mensaje_cambiar
+		mov AH, 09
+		int 21
+		pop DX
+
+        ;; regresar
+        add DH, 02
+		mov BH, 00
+		mov AH, 02
+		int 10
+		push DX
+		mov DX, offset regresar
+		mov AH, 09
+		int 21
+		pop DX
+		;;
+		call pintar_flecha_configuracion
+		;;;;
+		;; LEER TECLA
+entrada_menu_configuracion:
+		mov AH, 00
+		int 16
+		cmp AH, 48
+		je restar_opcion_menu_configuracion
+		cmp AH, 50
+		je sumar_opcion_menu_configuracion
+		cmp AH, 3b  ;; le doy F1
+		je fin_menu_configuracion
+		jmp entrada_menu_configuracion
+
+restar_opcion_menu_configuracion:
+		mov AL, [opcion1]
+		dec AL
+		cmp AL, 0ff
+		je volver_a_cero_configuracion
+		mov [opcion1], AL
+		jmp mover_flecha_menu_configuracion
+sumar_opcion_menu_configuracion:
+		mov AL, [opcion1]
+		mov AH, [maximo1]
+		inc AL
+		cmp AL, AH
+		je volver_a_maximo_configuracion
+		mov [opcion1], AL
+		jmp mover_flecha_menu_configuracion
+volver_a_cero_configuracion:
+		mov AL, 0
+		mov [opcion1], AL
+		jmp mover_flecha_menu_configuracion
+volver_a_maximo_configuracion:
+		mov AL, [maximo1]
+		dec AL
+		mov [opcion1], AL
+		jmp mover_flecha_menu_configuracion
+mover_flecha_menu_configuracion:
+		mov AX, [xFlecha1]
+		mov BX, [yFlecha1]
+		mov SI, offset dim_sprite_vacio
+		mov DI, offset data_sprite_vacio
+		call pintar_sprite
+		mov AX, 50
+		mov BX, 80
+		mov CL, [opcion1]
+ciclo_ubicar_flecha_menu_configuracion:
+		cmp CL, 0
+		je pintar_flecha_menu_configuracion
+		dec CL
+		add BX, 10
+		jmp ciclo_ubicar_flecha_menu_configuracion
+pintar_flecha_menu_configuracion:
+		mov [xFlecha1], AX
+		mov [yFlecha1], BX
+		call pintar_flecha_configuracion
+		jmp entrada_menu_configuracion
+		;;
+fin_menu_configuracion:
+		ret
+
+
 ;; adaptar_coordenada - 40x25->320x200
 ;; ENTRADA:
 ;;    AH -> x 40x25
@@ -560,6 +1031,7 @@ pintar_flecha:
 ;;    AX -> x 320x200
 ;;    BX -> y 320x200
 adaptar_coordenada:
+
 		mov DL, 08
 		mov CX, AX
 		mul DL
@@ -1092,6 +1564,52 @@ seguir_convirtiendo:
 retorno_cadenaAnum:
 		ret
 
+mapear_abajo:
+		mov DL, 10
+		add DL, 04  
+		mov DH, 06
+		mov BH, 00
+		mov AH, 02
+		int 10
+
+		mov DX, offset label_flecha_abajo
+		mov AH, 09
+		int 21
+		jmp actual_control_arriba
+
+mapear_arriba:
+		mov DL, 10
+		add DL, 04 
+		mov DH, 08
+		mov BH, 00
+		mov AH, 02
+		int 10
+		;; Si es la flecha hacia arriba
+		mov DX, offset label_flecha_arriba
+		mov AH, 09
+		int 21
+		jmp actual_control_derecha
+
+mapear_derecha:
+        mov DL, 10
+        add DL, 04  
+		mov DH, 08
+        add DH, 02   
+		mov BH, 00
+		mov AH, 02
+		int 10
+
+        mov DX, offset label_flecha_derecha
+		mov AH, 09
+		int 21
+   		jmp actual_control_izquierda
+
+mapear_izquierda:
+
+        mov DX, offset label_flecha_izquierda
+		mov AH, 09
+		int 21
+    	jmp seleccionar_opcion_configuracion
 
 fin:
 .EXIT
