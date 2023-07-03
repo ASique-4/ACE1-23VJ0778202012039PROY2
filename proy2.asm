@@ -226,6 +226,13 @@ ciclo_juego:
 
 
 		;;
+vaciar_mapa:
+		mov DI, offset mapa
+		mov CX, 3e8
+		mov AL, 00
+		call memset
+		jmp ciclo_lineas
+		;;;;;;;;;;;;;;;;
 ciclo_lineas:
 		mov BX, [handle_nivel]
 		call siguiente_linea
@@ -363,7 +370,7 @@ fin_parseo:
 		mov AH, 3e
 		mov BX, [handle_nivel]
 		int 21
-		;;
+		;call memset
 		int 03
 		jmp ciclo_juego
 		jmp fin
@@ -1133,6 +1140,7 @@ obtener_de_mapa:
 ;; ENTRADA:
 ;; SALIDA:
 pintar_mapa:
+		;call memset
 		mov AL, 1   ;; fila
 		;;
 ciclo_v:
@@ -2267,6 +2275,7 @@ copiar_nombre:	mov AL, [DI]
 		mov DX, offset nueva_lin
 		mov AH, 09
 		int 21
+		;call memset
 		;;
 buscar_archivo:
 
@@ -2285,11 +2294,12 @@ cargar_un_nivel_x:
 		jc inicio
 		mov [handle_nivel], AX
 		;call memset
-        jmp ciclo_lineas
+        jmp vaciar_mapa
     
 salirr:
     ;jmp pedir_nivel_juego
     ret
+
 
 ;; cadenaAnum
 ;; ENTRADA:
